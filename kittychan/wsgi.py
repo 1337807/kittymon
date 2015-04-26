@@ -14,7 +14,7 @@ from dj_static import Cling
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kittychan.settings")
 
-if os.environ['DYNO']:
+if os.environ.get('DYNO'):
     application = Cling(get_wsgi_application())
 else:
     application = get_wsgi_application()

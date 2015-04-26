@@ -84,7 +84,7 @@ DATABASES = {
         'USER': 'kittychan',
     }
 }
-if os.environ['DYNO']:
+if os.environ.get('DYNO'):
     DATABASES['default'] = dj_database_url.config()
 
 # Internationalization
