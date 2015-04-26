@@ -1,0 +1,14 @@
+<h1>Choose your Kittymon!</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'kittymon:caught' %}" method="post">
+{% csrf_token %}
+{% for kitty in kitties %}
+    <input type="radio" name="kitty" id="kitty{{ forloop.counter }}" value="{{ kitty.id }}" />
+    <label for="kitty{{ forloop.counter }}">
+        <img src="{{ kitty.url }}"\>
+    </label><br />
+{% endfor %}
+<input type="submit" value="Catch it!" />
+</form>

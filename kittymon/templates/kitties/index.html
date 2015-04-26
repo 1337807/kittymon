@@ -1,0 +1,9 @@
+{% if kitties %}
+    <ul>
+    {% for kitty in kitties %}
+    <li><a href="{% url 'kittymon:detail' kitty.id %}">{{ kitty.url }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You don't have any kitties!</p>
+{% endif %}
