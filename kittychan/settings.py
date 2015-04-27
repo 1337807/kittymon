@@ -53,10 +53,13 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'kittychan.urls'
 
+LOGIN_URL = 'django.contrib.auth.views.login'
+LOGIN_REDIRECT_URL = '/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['kittychan/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

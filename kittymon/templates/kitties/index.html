@@ -1,9 +1,17 @@
-{% if kitties %}
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if user_kitties %}
+    <a href="{% url 'kittymon:catch' %}">Catch another kitty!</a>
     <ul>
-    {% for kitty in kitties %}
-    <li><a href="{% url 'kittymon:detail' kitty.id %}">{{ kitty.url }}</a></li>
+    {% for user_kitty in user_kitties %}
+    <li><a href="{% url 'kittymon:detail' user_kitty.kitty.id %}">{{ user_kitty.kitty.url }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
     <p>You don't have any kitties!</p>
+    <a href="{% url 'kittymon:catch' %}">Catch a kitty!</a>
 {% endif %}
+
+{% endblock %}
