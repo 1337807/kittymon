@@ -21,9 +21,9 @@
 {% block sidebar %}
   <div class="col-md-4 content">
     {% if user_kitties %}
-      <a class='btn btn-success btn-lg' href="{% url 'kittymon:catch' %}">Catch another kitty!</a>
+      <a class='btn btn-success btn-lg' id="catch_kitty" href="{% url 'kittymon:catch' %}">Catch another kitty!</a>
     {% else %}
-      <a class='btn btn-success btn-lg' href="{% url 'kittymon:catch' %}">Catch a kitty!</a>
+      <a class='btn btn-success btn-lg' id="catch_kitty" href="{% url 'kittymon:catch' %}">Catch a kitty!</a>
     {% endif %}
 
     <div class="leaderboard">
