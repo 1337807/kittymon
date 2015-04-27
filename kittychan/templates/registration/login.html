@@ -5,9 +5,9 @@
   <h1>Login</h1>
   <br>
 
-  {% if form.errors %}
-    {{ form.errors }}
-  {% endif %}
+  {% for error in form.non_field_errors %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endfor %}
 
   <div class="col-md-4">
     <form role="form" class="form-horizontal" method="post" action="{% url 'django.contrib.auth.views.login' %}">
@@ -27,7 +27,7 @@
                 <br>
             {% endfor %}
             <br/>
-            <input type="submit" class="btn btn-primary" value="Sign up" />
+            <input type="submit" class="btn btn-primary" value="Login" />
             <input type="hidden" name="next" value="{{ next }}" />
         </div>
     </form>

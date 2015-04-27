@@ -13,15 +13,18 @@
             {% endfor %}
         </div>
     {% else %}
-        <p>You don't have any kitties!</p>
-        <a class='btn btn-large btn-success' href="{% url 'kittymon:catch' %}">Catch a kitty!</a>
+      <h2>You don't have any kitties!</h2>
     {% endif %}
   </div>
 {% endblock %}
 
 {% block sidebar %}
   <div class="col-md-4 content">
-    <a class='btn btn-success btn-lg' href="{% url 'kittymon:catch' %}">Catch another kitty!</a>
+    {% if user_kitties %}
+      <a class='btn btn-success btn-lg' href="{% url 'kittymon:catch' %}">Catch another kitty!</a>
+    {% else %}
+      <a class='btn btn-success btn-lg' href="{% url 'kittymon:catch' %}">Catch a kitty!</a>
+    {% endif %}
 
     <div class="leaderboard">
       <h3>Top 10 Kitty Trainers</h3>
