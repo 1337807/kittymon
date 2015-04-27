@@ -1,26 +1,16 @@
+from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse
 from django.views import generic
-
-from django import forms
+from django.utils.decorators import method_decorator
+from django.core.urlresolvers import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.utils.decorators import method_decorator
 from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.signals import user_logged_out
-
-from .models import Kitty, UserKitty
-
-def logged_in_message(sender, user, request, **kwargs):
-    messages.info(request, "Welcome!")
-user_logged_in.connect(logged_in_message)
-
-def logged_out_message(sender, user, request, **kwargs):
-    messages.info(request, "Goodbye!")
-user_logged_in.connect(logged_in_message)
-user_logged_out.connect(logged_out_message)
+from django.contrib import messages
+from django.db.models import Count
+from .models import Kitty, UserKitty, User
 
 class LoggedInMixin(object):
 
@@ -28,7 +18,17 @@ class LoggedInMixin(object):
     def dispatch(self, *args, **kwargs):
         return super(LoggedInMixin, self).dispatch(*args, **kwargs)
 
-class IndexView(LoggedInMixin, generic.ListView):
+class KittyList(generic.ListView):
+    def get_context_data(self, **kwargs):
+            context = super(KittyList, self).get_context_data(**kwargs)
+            top10 = User.objects.annotate(kitty_count=Count('userkitty')).order_by('-kitty_count')[:10]
+            context['leaders'] = top10
+            return context
+
+class HomeView(generic.TemplateView):
+    template_name = 'kitties/home.html'
+
+class IndexView(LoggedInMixin, KittyList):
     model = UserKitty
     template_name = 'kitties/index.html'
     context_object_name = 'user_kitties'
@@ -69,3 +69,12 @@ def register(request):
         return render(request, "registration/register.html", {
             'form': form,
         })
+
+def logged_in_message(sender, user, request, **kwargs):
+    messages.success(request, "Logged in successfully!")
+user_logged_in.connect(logged_in_message)
+
+def logged_out_message(sender, user, request, **kwargs):
+    messages.warning(request, "Logged out!")
+user_logged_in.connect(logged_in_message)
+user_logged_out.connect(logged_out_message)

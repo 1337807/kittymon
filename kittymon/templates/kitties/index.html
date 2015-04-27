@@ -1,17 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <div class="col-md-8 content">
+    {% if user_kitties %}
+        <div class="row">
+            {% for user_kitty in user_kitties %}
+              <div class="kitty col-xs-6 col-md-3">
+                <a class="thumbnail" href="{% url 'kittymon:detail' user_kitty.kitty.id %}">
+                  <img src="{{ user_kitty.kitty.url }}"/>
+                </a>
+              </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You don't have any kitties!</p>
+        <a class='btn btn-large btn-success' href="{% url 'kittymon:catch' %}">Catch a kitty!</a>
+    {% endif %}
+  </div>
+{% endblock %}
 
-{% if user_kitties %}
-    <a href="{% url 'kittymon:catch' %}">Catch another kitty!</a>
-    <ul>
-    {% for user_kitty in user_kitties %}
-    <li><a href="{% url 'kittymon:detail' user_kitty.kitty.id %}">{{ user_kitty.kitty.url }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>You don't have any kitties!</p>
-    <a href="{% url 'kittymon:catch' %}">Catch a kitty!</a>
-{% endif %}
+{% block sidebar %}
+  <div class="col-md-4 content">
+    <a class='btn btn-success btn-lg' href="{% url 'kittymon:catch' %}">Catch another kitty!</a>
 
+    <div class="leaderboard">
+      <h3>Top 10 Kitty Trainers</h3>
+      <ul>
+        {% for leader in leaders %}
+          <li><h4>{{ leader.username }} ({{ leader.userkitty_set.all|length }})</h4></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 {% endblock %}

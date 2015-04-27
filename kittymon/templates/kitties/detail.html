@@ -1,3 +1,7 @@
-{% if kitty %}
-    <img src="{{ kitty.url }}"/>
-{% endif %}
+{% block content %}
+  <div id="col-md-8 content">
+    {% if kitty %}
+      <img src="{{ kitty.url }}"/>
+    {% endif %}
+  </div>
+{% endblock %}

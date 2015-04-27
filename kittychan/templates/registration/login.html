@@ -1,26 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container">
+  <h1>Login</h1>
+  <br>
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+  {% if form.errors %}
+    {{ form.errors }}
+  {% endif %}
 
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+  <div class="col-md-4">
+    <form role="form" class="form-horizontal" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+        {% csrf_token %}
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
+        <div class="form-group">
+            {% for field in form %}
+                <div class="input-group">
+                    <label>{{ field.label }}</label>
+                    <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" type="text" />
+                    {{ field.errors }}
+                </div>
+                <br>
+            {% endfor %}
+            <br/>
+            <input type="submit" class="btn btn-primary" value="Sign up" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

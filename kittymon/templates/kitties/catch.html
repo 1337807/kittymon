@@ -1,14 +1,30 @@
-<h1>Choose your Kittymon!</h1>
+{% extends 'base.html' %}
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% block content %}
+<div class="container">
+  <div id="col-md-8 content">
+    <div class="row">
+      <div class="col-md-4">
+        <h1>Choose your Kitty!</h1><br>
+      </div>
+    </div>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'kittymon:caught' %}" method="post">
-{% csrf_token %}
-{% for kitty in kitties %}
-    <input type="radio" name="kitty" id="kitty{{ forloop.counter }}" value="{{ kitty.id }}" />
-    <label for="kitty{{ forloop.counter }}">
-        <img src="{{ kitty.url }}"\>
-    </label><br />
-{% endfor %}
-<input type="submit" value="Catch it!" />
-</form>
+    <form action="{% url 'kittymon:caught' %}" method="post">
+      {% csrf_token %}
+      <div class='row'>
+      {% for kitty in kitties %}
+        <div class='kitty-choice col-xs-6 col-md-3'>
+          <input type="radio" name="kitty" id="kitty{{ forloop.counter }}" class="hidden" value="{{ kitty.id }}" />
+          <label for="kitty{{ forloop.counter }}">
+            <img class="thumbnail" src="{{ kitty.url }}"\>
+          </label><br />
+        </div>
+      {% endfor %}
+    </div>
+      <br>
+      <input class='btn btn-success' type="submit" value="Catch it!" />
+    </form>
+  </div>
+</div>
+{% endblock %}

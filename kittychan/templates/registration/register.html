@@ -3,14 +3,32 @@
 {% block title %}Create an account{% endblock %}
 
 {% block content %}
+<div class="container">
   <h1>Create an account</h1>
+  <br>
 
   {% if form.errors %}
     {{ form.errors }}
   {% endif %}
-  <form action="" method="post">
-      {{ form.as_p }}
-      {% csrf_token %}
-      <input type="submit" value="Create the account">
-  </form>
+
+  <div class="col-md-4">
+    <form role="form" class="form-horizontal" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            {% for field in form %}
+                <div class="input-group">
+                    <label>{{ field.label }}</label>
+                    <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" type="text" />
+                    {{ field.errors }}
+                </div>
+                <br>
+            {% endfor %}
+            <br/>
+            <input type="submit" class="btn btn-primary" value="Sign up" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
