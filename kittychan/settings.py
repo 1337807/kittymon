@@ -54,7 +54,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'kittychan.urls'
 
 LOGIN_URL = 'django.contrib.auth.views.login'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/kitties'
 
 TEMPLATES = [
     {
