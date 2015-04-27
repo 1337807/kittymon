@@ -17,7 +17,11 @@
             {% for field in form %}
                 <div class="input-group">
                     <label>{{ field.label }}</label>
-                    <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" type="text" />
+                    {% if field.label == 'Username' %}
+                      <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" type="text" />
+                    {% else %}
+                      <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" type="password" />
+                    {% endif %}
                     {{ field.errors }}
                 </div>
                 <br>
