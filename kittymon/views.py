@@ -11,6 +11,7 @@ from django.contrib.auth.signals import user_logged_out
 from django.contrib import messages
 from django.db.models import Count
 from .models import Kitty, UserKitty, User
+import newrelic.agent
 
 class LoggedInMixin(object):
 
