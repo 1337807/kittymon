@@ -10,8 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dj_database_url
+import sys
+
+if sys.argv[1] == 'runserver':
+    environment = 'development'
+else:
+    environment = 'production'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,13 +29,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '5tkc_1#djnwp8qj#dz(op_k$@%(1y#e&7)%8$$3w6ir!@i0yqy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if environment == 'production':
+    DEBUG = False
+else:
+    DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,7 +47,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'kittymon',
 )
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,10 +59,8 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'kittychan.urls'
-
 LOGIN_URL = 'django.contrib.auth.views.login'
 LOGIN_REDIRECT_URL = '/kitties'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -71,15 +76,10 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'kittychan.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-import dj_database_url
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -87,29 +87,21 @@ DATABASES = {
         'USER': 'kittymon',
     }
 }
-if os.environ.get('DYNO'):
+if environment == 'production':
     DATABASES['default'] = dj_database_url.config()
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'US/Pacific'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
-import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
