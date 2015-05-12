@@ -83,8 +83,8 @@ import dj_database_url
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'kittychan',
-        'USER': 'kittychan',
+        'NAME': 'kittymon',
+        'USER': 'kittymon',
     }
 }
 if os.environ.get('DYNO'):
