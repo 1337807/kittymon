@@ -11,6 +11,20 @@
 {% block content %}
   <div class="col-md-8 content">
     {% if user_kitties %}
+        <div id='pagination'>
+            {% if user_kitties.has_previous %}
+                <a href="?page={{ user_kitties.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+              Page {{ user_kitties.number }} of {{ user_kitties.paginator.num_pages }}
+            </span>
+
+            {% if user_kitties.has_next %}
+                <a href="?page={{ user_kitties.next_page_number }}">next</a>
+            {% endif %}
+        </div>
+
         <div class="row">
             {% for user_kitty in user_kitties %}
               <div class="kitty col-xs-6 col-md-3">

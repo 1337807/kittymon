@@ -59,3 +59,8 @@ img#vs {
 a#fight {
   margin: -75px 0 0 25px;
 }
+
+#pagination {
+  text-align: right;
+  margin-bottom: 15px;
+}
