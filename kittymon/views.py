@@ -96,10 +96,14 @@ def fight(request, hero_userkitty_id, villain_userkitty_id):
     response = requests.post("{faas_url}/fight".format(faas_url=kfaas), data=payload)
 
     if response.text == hero_kitty.url:
+        newrelic.agent.add_custom_parameter("battle_winner", hero_userkitty.user.username)
+        newrelic.agent.add_custom_parameter("battle_loser", villain_userkitty.user.username)
         messages.success(request, "You defeated {villain} and stole their kitty!".format(villain=villain_userkitty.user.username))
         villain_userkitty.user_id = hero_userkitty.user_id
         villain_userkitty.save()
     else:
+        newrelic.agent.add_custom_parameter("battle_winner", villain_userkitty.user.username)
+        newrelic.agent.add_custom_parameter("battle_loser", hero_userkitty.user.username)
         messages.warning(request, "You were defeated by {villain} and lost your kitty!".format(villain=villain_userkitty.user.username))
         hero_userkitty.user_id = villain_userkitty.user_id
         hero_userkitty.save()
