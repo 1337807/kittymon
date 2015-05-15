@@ -22,7 +22,7 @@ else:
 if environment == 'development':
     FAAS_URL = 'http://localhost:3000'
 else:
-    FAAS_URL = 'http://faas.jonanstudios.com'
+    FAAS_URL = 'https://kitty-fights-as-a-service.herokuapp.com/'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
