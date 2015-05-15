@@ -5,6 +5,7 @@ from django.views import generic
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.signals import user_logged_in
@@ -38,7 +39,17 @@ class IndexView(LoggedInMixin, KittyList):
     context_object_name = 'user_kitties'
 
     def get_queryset(self):
-        return UserKitty.objects.filter(user_id=self.request.user.id)
+        kitties = UserKitty.objects.filter(user_id=self.request.user.id)
+        paginator = Paginator(kitties, 20)
+        page = self.request.GET.get('page')
+
+        try:
+          kitties = paginator.page(page)
+        except PageNotAnInteger:
+          kitties = paginator.page(1)
+        except EmptyPage:
+          kitties = paginator.page(paginator.num_pages)
+        return kitties
 
 class BattleKitties(generic.DetailView):
     def get_context_data(self, **kwargs):
