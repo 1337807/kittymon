@@ -91,6 +91,8 @@ def fight(request, hero_userkitty_id, villain_userkitty_id):
     payload = { 'contenders' : [hero_kitty.url, villain_kitty.url] }
 
     kfaas = settings.FAAS_URL
+    newrelic.agent.add_custom_parameter('kfaas', kfaas)
+
     response = requests.post("{faas_url}/fight".format(faas_url=kfaas), data=payload)
 
     if response.text == hero_kitty.url:
