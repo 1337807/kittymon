@@ -35,7 +35,7 @@ SECRET_KEY = '5tkc_1#djnwp8qj#dz(op_k$@%(1y#e&7)%8$$3w6ir!@i0yqy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if environment == 'production':
-    DEBUG = False
+    DEBUG = True
 else:
     DEBUG = True
 

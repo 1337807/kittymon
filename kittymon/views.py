@@ -89,7 +89,9 @@ def fight(request, hero_userkitty_id, villain_userkitty_id):
     villain_kitty = villain_userkitty.kitty
 
     payload = { 'contenders' : [hero_kitty.url, villain_kitty.url] }
-    response = requests.post('http://localhost:3000/fight', data=payload)
+
+    kfaas = settings.FAAS_URL
+    response = requests.post("{faas_url}/fight".format(faas_url=kfaas), data=payload)
 
     if response.text == hero_kitty.url:
         messages.success(request, "You defeated {villain} and stole their kitty!".format(villain=villain_userkitty.user.username))
