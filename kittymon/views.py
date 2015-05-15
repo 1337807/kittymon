@@ -76,8 +76,8 @@ class CatchView(LoggedInMixin, generic.ListView):
 
 def caught(request):
     new_kitty = get_object_or_404(Kitty, pk=request.POST['kitty'])
-    newrelic.agent.add_custom_parameter("caught_kitty", new_kitty.id)
-    newrelic.agent.add_custom_parameter("catching_user", request.user.id)
+    newrelic.agent.add_custom_parameter("caught_kitty", new_kitty.url)
+    newrelic.agent.add_custom_parameter("catching_user", request.user.username)
     UserKitty.objects.create(user=request.user, kitty=new_kitty)
     return HttpResponseRedirect(reverse('kittymon:index'))
 
