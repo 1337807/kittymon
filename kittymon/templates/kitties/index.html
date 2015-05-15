@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block head %}
+  {% load staticfiles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'kittymon/style.css' %}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="{% static 'js/index.js' %}"></script>
+{% endblock %}
+
 {% block content %}
   <div class="col-md-8 content">
     {% if user_kitties %}
@@ -7,6 +15,8 @@
             {% for user_kitty in user_kitties %}
               <div class="kitty col-xs-6 col-md-3">
                 <a class="thumbnail" href="{% url 'kittymon:detail' user_kitty.kitty.id %}">
+                  {% load staticfiles %}
+                  <img class='battle' src="{% static 'kittymon/images/battle.png' %}"/>
                   <img src="{{ user_kitty.kitty.url }}"/>
                 </a>
               </div>

@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.utils.decorators import method_decorator
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -11,7 +12,9 @@ from django.contrib.auth.signals import user_logged_out
 from django.contrib import messages
 from django.db.models import Count
 from .models import Kitty, UserKitty, User
+
 import newrelic.agent
+import requests
 
 class LoggedInMixin(object):
 
@@ -21,10 +24,10 @@ class LoggedInMixin(object):
 
 class KittyList(generic.ListView):
     def get_context_data(self, **kwargs):
-            context = super(KittyList, self).get_context_data(**kwargs)
-            top10 = User.objects.annotate(kitty_count=Count('userkitty')).order_by('-kitty_count')[:10]
-            context['leaders'] = top10
-            return context
+        context = super(KittyList, self).get_context_data(**kwargs)
+        top10 = User.objects.annotate(kitty_count=Count('userkitty')).order_by('-kitty_count')[:10]
+        context['leaders'] = top10
+        return context
 
 class HomeView(generic.TemplateView):
     template_name = 'kitties/home.html'
@@ -37,7 +40,29 @@ class IndexView(LoggedInMixin, KittyList):
     def get_queryset(self):
         return UserKitty.objects.filter(user_id=self.request.user.id)
 
-class DetailView(LoggedInMixin, generic.DetailView):
+class BattleKitties(generic.DetailView):
+    def get_context_data(self, **kwargs):
+        context = super(BattleKitties, self).get_context_data(**kwargs)
+
+        hero = self.request.user
+        hero_userkitty = hero.userkitty_set.filter(kitty_id=context['kitty'].id).order_by('?')[0]
+        hero_kitty_url = hero_userkitty.kitty.url
+
+        villain = User.objects.exclude(id=hero.id).order_by('?')[0]
+        villain_userkitty = villain.userkitty_set.order_by('?')[0]
+        villain_kitty_url = villain_userkitty.kitty.url
+
+        context['hero_name'] = hero.username
+        context['hero_userkitty_id'] = hero_userkitty.id
+        context['hero_kitty_url'] = hero_kitty_url
+
+        context['villain_name'] = villain.username
+        context['villain_userkitty_id'] = villain_userkitty.id
+        context['villain_kitty_url'] = villain_kitty_url
+
+        return context
+
+class DetailView(LoggedInMixin, BattleKitties):
     model = Kitty
     template_name = 'kitties/detail.html'
 
@@ -54,6 +79,27 @@ def caught(request):
     newrelic.agent.add_custom_parameter("caught_kitty", new_kitty.id)
     newrelic.agent.add_custom_parameter("catching_user", request.user.id)
     UserKitty.objects.create(user=request.user, kitty=new_kitty)
+    return HttpResponseRedirect(reverse('kittymon:index'))
+
+def fight(request, hero_userkitty_id, villain_userkitty_id):
+    hero_userkitty = UserKitty.objects.get(id=hero_userkitty_id)
+    hero_kitty = hero_userkitty.kitty
+
+    villain_userkitty = UserKitty.objects.get(id=villain_userkitty_id)
+    villain_kitty = villain_userkitty.kitty
+
+    payload = { 'contenders' : [hero_kitty.url, villain_kitty.url] }
+    response = requests.post('http://localhost:3000/fight', data=payload)
+
+    if response.text == hero_kitty.url:
+        messages.success(request, "You defeated {villain} and stole their kitty!".format(villain=villain_userkitty.user.username))
+        villain_userkitty.user_id = hero_userkitty.user_id
+        villain_userkitty.save()
+    else:
+        messages.warning(request, "You were defeated by {villain} and lost your kitty!".format(villain=villain_userkitty.user.username))
+        hero_userkitty.user_id = villain_userkitty.user_id
+        hero_userkitty.save()
+
     return HttpResponseRedirect(reverse('kittymon:index'))
 
 def register(request):

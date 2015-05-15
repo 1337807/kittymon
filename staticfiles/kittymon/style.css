@@ -1,0 +1,43 @@
+.kitty .thumbnail img {
+  width: 150px;
+  height: 150px;
+}
+
+.kitty-choice img.thumbnail {
+  width: 250px;
+  height: 250px;
+}
+
+.kitty-choice input[type="radio"]:checked + label {
+  background: pink;
+}
+
+.leaderboard ul {
+  list-style-type: none;
+}
+
+.leaderboard li h4 {
+  padding-left: 25px;
+  background: url('images/pokeball.png') center left no-repeat;
+  background-size: 18px;
+}
+
+body {
+  background: #fbe1e1;
+}
+
+.jumbotron {
+  border: 1px solid #ddd;
+  background: url('images/pokemon.jpg') top left no-repeat;
+}
+
+.navbar {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  background: #ffc6c6;
+}
+
+img.detail {
+  width: 300px;
+  height: 300px;
+}

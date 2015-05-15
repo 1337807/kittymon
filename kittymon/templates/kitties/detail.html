@@ -1,7 +1,23 @@
+{% extends "base.html" %}
+
 {% block content %}
-  <div id="col-md-8 content">
-    {% if kitty %}
-      <img src="{{ kitty.url }}"/>
-    {% endif %}
+  <div class='row battle'>
+    <div class="col-md-4 content">
+      <div class='container'>
+        <h3>{{ hero_name }}</h3>
+        <img class='thumbnail detail' src="{{ hero_kitty_url }}"/>
+      </div>
+    </div>
+    <div class="col-md-2 content">
+      {% load staticfiles %}
+      <img id="vs" src="{% static 'kittymon/images/vs.png' %}" />
+      <a id="fight" class='btn btn-success btn-lg' href="{% url 'kittymon:fight' hero_userkitty_id villain_userkitty_id %}">Fight!</a>
+    </div>
+    <div class="col-md-4 content">
+      <div class='container'>
+        <h3>{{ villain_name }}</h3>
+        <img class='thumbnail detail' src="{{ villain_kitty_url }}"/>
+      </div>
+    </div>
   </div>
 {% endblock %}

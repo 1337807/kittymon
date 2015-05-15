@@ -36,3 +36,26 @@ body {
   border: 1px solid #ccc;
   background: #ffc6c6;
 }
+
+img.detail {
+  width: 300px;
+  height: 300px;
+}
+
+img.battle {
+  display: none;
+  position: absolute;
+}
+
+div.battle div.content {
+  float: left;
+}
+
+img#vs {
+  margin-left: -10px;
+  margin-top: 50px;
+}
+
+a#fight {
+  margin: -75px 0 0 25px;
+}

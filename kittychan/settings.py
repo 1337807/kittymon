@@ -19,6 +19,11 @@ if sys.argv[1] == 'runserver':
 else:
     environment = 'production'
 
+if environment == 'development':
+    FAAS_URL = 'http://localhost:3000'
+else:
+    FAAS_URL = 'http://faas.jonanstudios.com'
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -45,6 +50,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'jquery',
     'kittymon',
 )
 MIDDLEWARE_CLASSES = (
